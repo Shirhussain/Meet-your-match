@@ -142,7 +142,7 @@ MEDIA_ROOT = BASE_DIR / "media_root"
 # Email backend 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'me@gmail.com'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_PASSWORD = 'your pass'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
