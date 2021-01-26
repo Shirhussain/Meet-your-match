@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     # third party 
     'stripe',
     'registration',
+    'crispy_forms',
     
     # my app
     'profiles',
 ]
 SITE_ID = 1
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
