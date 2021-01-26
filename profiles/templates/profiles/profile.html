@@ -7,9 +7,15 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-6">
-            {{user}}
+            <h1> 
+                {% if user.get_full_name %}
+                    {{user.get_full_name}}
+                {% else %}
+                    {{user.username}}
+                {% endif %}
+            </h1>
+
             <ul>
-                
                 {% for item in user.userpicture_set.all %}
                     <img src="{{item.image.url}}" class="img-fluid"  alt="profile image">
                 {% endfor %}
@@ -18,20 +24,30 @@
         </div>
 
         <div class="col-lg-6">
-            <ul>
-                
-                {% for item in user.address_set.all %}
-                    <li>{{item}}</li>
-                {% endfor %}
-                    
-            </ul>
-            <ol>
-                
-                {% for item in user.job_set.all %}
-                    <li>{{item}}</li>
-                {% endfor %}
-                    
-            </ol>
+            <h1>Info</h1>
+            <div class="card border-primary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Recent Jobs</div>
+                <div class="card-body text-primary">
+                    <p class="card-text">
+                        {% for item in user.job_set.all %}
+                            {{item}}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="card border-primary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Address</div>
+                <div class="card-body text-primary">
+                    <p class="card-text">
+                        {% for item in user.address_set.all %}
+                        {{item}}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+
+
         </div>
     </div>
 {% endblock content %}
