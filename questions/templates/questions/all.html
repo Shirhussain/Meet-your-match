@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Questions title
+{% endblock title %}
+
+{% block content %}
+    <div class="row">
+        
+        {% for question in questions %}
+            {{question}}
+            
+            {% for answer in question.answer_set.all %}
+                {{answer}}
+            {% endfor %}
+                
+        {% endfor %}
+            
+    </div>
+{% endblock content %}
+    

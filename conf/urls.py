@@ -10,6 +10,7 @@ urlpatterns = [
     path('', home, name="home"),
     path('accounts/', include('registration.backends.default.urls')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
+    path('questions/', include('questions.urls', namespace='questions')),
 ]
 
 if settings.DEBUG:

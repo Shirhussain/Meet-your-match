@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     
     # my app
     'profiles',
+    'questions',
 ]
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
