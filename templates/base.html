@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -29,13 +30,7 @@
             </div>
           </div>
           <div class="col-lg-10 col-12">
-            {% if messages %}
-              <ul class="messages">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-              {% endif %}
+            {% include 'alert.html' %}
             {% block content %}
             {% endblock content %}
           </div>
@@ -64,6 +59,7 @@
         e.preventDefault()
         $(this).tab('show')
       })
-  </script>
+
+    </script>
   </body>
 </html>

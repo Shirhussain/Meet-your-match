@@ -6,16 +6,66 @@
 
 {% block content %}
     <div class="row">
-        
-        {% for question in questions %}
-            {{question}}
-            
-            {% for answer in question.answer_set.all %}
-                {{answer}}
+        <div class="col-12">
+            {% for question in questions %}
+                <h3>{{question}}?</h3>
+                <form action="" method="POST">
+                    <p>
+                        <input type="hidden" name="question_id" value="{{question.id}}">
+                        {% csrf_token %}
+                        {% for answer in question.answer_set.all %}
+                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.useranswer_set.all %} {% if abc %} checked='checked' {% endif %} {% endfor %} name="answer">{{answer}}<br>
+                        {% endfor %}
+
+                        How important is this to you?
+                        <select name="importance_level" required="required">
+                            
+                            {% for imp in importance_level %}
+                                <option value="{{imp}}" {% for abc in question.useranswer_set.all %} {% if abc.importance_level == imp %} selected='selected' {% endif %} {% endfor %} >{{imp}}</option>
+                            {% endfor %}
+                                
+                        </select>
+                    </p>
+                    <h4>Match ideal answer <small>how would you like them to answer?</small></h4>
+                    <p>
+                        
+                        {% for answer in question.answer_set.all %}
+                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.matchanswer_set.all %} {% if abc %} checked="checked" {% endif %} {% endfor %} name="match_answer">{{answer}} <br>
+                        {% endfor %}
+                            
+                        Their answer Importance to you? 
+                        <select name="match_importance_level" required="required" >
+                            
+                            {% for imp in importance_level %}
+                                <option value="{{imp}}" {% for abc in question.matchanswer_set.all %} {% if abc.importance_level == imp %} selected="selected" {% endif %} {% endfor %}>{{imp}}</option>
+                            {% endfor %}
+                                
+                        </select>
+                    </p>
+                    <p>
+                        <input type="submit" class="btn btn-success" value="Save">
+                    </p>
+                </form>
             {% endfor %}
-                
-        {% endfor %}
             
+            <div class="pagination">
+                <span class="step-links">
+                    {% if questions.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ questions.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+                    </span>
+            
+                    {% if questions.has_next %}
+                        <a href="?page={{ questions.next_page_number }}">next</a>
+                        <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
     </div>
 {% endblock content %}
     
