@@ -14,14 +14,14 @@
                         <input type="hidden" name="question_id" value="{{question.id}}">
                         {% csrf_token %}
                         {% for answer in question.answer_set.all %}
-                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.useranswer_set.all %} {% if abc %} checked='checked' {% endif %} {% endfor %} name="answer">{{answer}}<br>
+                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.useranswer_set.all %} {% if abc and abc.user == request.user %} checked='checked' {% endif %} {% endfor %} name="answer">{{answer}}<br>
                         {% endfor %}
 
                         How important is this to you?
                         <select name="importance_level" required="required">
                             
                             {% for imp in importance_level %}
-                                <option value="{{imp}}" {% for abc in question.useranswer_set.all %} {% if abc.importance_level == imp %} selected='selected' {% endif %} {% endfor %} >{{imp}}</option>
+                                <option value="{{imp}}" {% for abc in question.useranswer_set.all %} {% if abc.importance_level == imp and abc.user == request.user %} selected='selected' {% endif %} {% endfor %} >{{imp}}</option>
                             {% endfor %}
                                 
                         </select>
@@ -30,14 +30,14 @@
                     <p>
                         
                         {% for answer in question.answer_set.all %}
-                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.matchanswer_set.all %} {% if abc %} checked="checked" {% endif %} {% endfor %} name="match_answer">{{answer}} <br>
+                            <input type="radio" required="required" value="{{answer}}" {% for abc in answer.matchanswer_set.all %} {% if abc and abc.user == request.user %} checked="checked" {% endif %} {% endfor %} name="match_answer">{{answer}} <br>
                         {% endfor %}
                             
                         Their answer Importance to you? 
                         <select name="match_importance_level" required="required" >
                             
                             {% for imp in importance_level %}
-                                <option value="{{imp}}" {% for abc in question.matchanswer_set.all %} {% if abc.importance_level == imp %} selected="selected" {% endif %} {% endfor %}>{{imp}}</option>
+                                <option value="{{imp}}" {% for abc in question.matchanswer_set.all %} {% if abc.importance_level == imp and abc.user == request.user %} selected="selected" {% endif %} {% endfor %}>{{imp}}</option>
                             {% endfor %}
                                 
                         </select>

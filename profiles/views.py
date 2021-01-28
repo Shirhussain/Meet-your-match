@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.shortcuts import Http404, HttpResponseRedirect, get_object_or_404, redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.forms import modelformset_factory
 
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Job, Address, UserPicture
-from django.urls import reverse
+from questions.matching import match_percentage
 
 def home(request):
     context = {
@@ -25,8 +26,15 @@ def single_user(request, username):
         user = User.objects.get(username=username)
     except:
         raise Http404
+    
+    # the code bellow the order is doesn't matter because it's two sided now but for points it's matter 
+    # because that one is one sided 
+    # match = match_percentage(request.user, single_user)
+    # because the above code retune a big number i need to rounded so here we go, it give me just for digit after '.'
+    match = round(match_percentage(request.user, user), 2)*100
     context = {
-        'user': user
+        'user': user,
+        'match': match
     }
     return render(request, "profiles/profile.html", context)
 
