@@ -6,6 +6,7 @@ from django.forms import modelformset_factory
 
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Job, Address, UserPicture
+from matches.models import Match
 from questions.matching import match_percentage
 
 def home(request):
@@ -27,11 +28,14 @@ def single_user(request, username):
     except:
         raise Http404
     
+    set_match, created = Match.objects.get_or_create(from_user=request.user, to_user=user)
+    set_match.percent = round(match_percentage(request.user, user), 2)*100
+    set_match.save()
     # the code bellow the order is doesn't matter because it's two sided now but for points it's matter 
     # because that one is one sided 
     # match = match_percentage(request.user, single_user)
     # because the above code retune a big number i need to rounded so here we go, it give me just for digit after '.'
-    match = round(match_percentage(request.user, user), 2)*100
+    match = set_match.percent*100
     context = {
         'user': user,
         'match': match
