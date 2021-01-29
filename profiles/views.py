@@ -6,7 +6,7 @@ from django.forms import modelformset_factory
 
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Job, Address, UserPicture
-from matches.models import Match
+from matches.models import JobMatch, Match
 from questions.matching import match_percentage
 
 def home(request):
@@ -16,20 +16,23 @@ def home(request):
     return render(request, "home.html", context)
 
 def all(request):
-    users = User.objects.filter(is_active=True)
-    try:
-        matches = Match.objects.user_mataches(request.user)
-    except:
-        # if the user is not logged in so code should pass
-        matches = []
-        pass 
-    
-    context = {
-        'users': users,
-        'matches': matches,
-    }
-    return render(request, "profiles/all.html", context)
-
+    if request.user.is_authenticated:
+        users = User.objects.filter(is_active=True)
+        try:
+            matches = Match.objects.user_mataches(request.user)
+        except:
+            # if the user is not logged in so code should pass
+            matches = []
+            pass 
+            
+        context = {
+            'users': users,
+            'matches': matches,
+        }
+        return render(request, "profiles/all.html", context)
+    else:
+        return render(request, "home.html")
+        
 def single_user(request, username):
     try:
         user = User.objects.get(username=username)
@@ -45,6 +48,16 @@ def single_user(request, username):
     # because that one is one sided 
     # match = match_percentage(request.user, single_user)
     # because the above code retune a big number i need to rounded so here we go, it give me just for digit after '.'
+    
+    if set_match.good_match:
+        user_jobs = Job.objects.filter(user=user)
+        if len(user_jobs)>0:
+            for job in user_jobs:
+                # i use get_or_create because i don't wanna create every time a new instance
+                job_match, created = JobMatch.objects.get_or_create(user=request.user, job=job)
+                print("This is Job matches: ", job_match)
+                job_match.save()
+
     match = set_match.percent*100
     context = {
         'user': user,

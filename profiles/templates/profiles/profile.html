@@ -1,5 +1,6 @@
 {% extends 'home.html' %}
 
+{% load static %}
 {% block title %}
     Profile
 {% endblock title %}
@@ -15,16 +16,25 @@
                 {% endif %}
             </h1>
 
-            <ul>
-                {% for item in user.userpicture_set.all %}
-                    <img src="{{item.image.url}}" class="img-fluid"  alt="profile image">
-                {% endfor %}
+            {% for pic in user.userpicture_set.all %}
+                                    
+                {% if forloop.first %}
+                    <img src="{{pic.image.url}}" alt="profile image" class="img-fluid rounded">     
+                {% endif %}
                     
-            </ul>
+            {% endfor %}
+
+        {% if not user.userpicture_set.all %}
+            <img src="{% static 'img/image.png' %}" alt="default avatar" class="img-fluid rounded">
+        {% endif %}
         </div>
 
         <div class="col-lg-6">
-            <h1>Match {{match}} %</h1>
+            
+            {% if not request.user == user %}
+                <h1>Match {{match}} %</h1>
+            {% endif %}
+                
             <h3>Info</h3>
             <div class="card border-primary mb-3" style="max-width: 18rem;">
                 <div class="card-header">Recent Jobs</div>
@@ -42,7 +52,14 @@
                 <div class="card-body text-primary">
                     <p class="card-text">
                         {% for item in user.address_set.all %}
-                        {{item}}
+                            
+                            {% if request.user.userrole.role == "Premium" or request.user.userrole.role == "Staff" %}
+                                <li>{{item.street_address}}, {{item.city}}, {{item.state}}</li>
+                            {% else %}
+                                {{item}}
+                            {% endif %}
+                                
+                                
                         {% endfor %}
                     </p>
                 </div>

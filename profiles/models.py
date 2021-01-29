@@ -72,3 +72,27 @@ class UserPicture(models.Model):
 
     def get_absolute_url(self):
         return reverse("UserPicture_detail", kwargs={"pk": self.pk})
+
+
+CHOICES = (
+    ('Regular', 'Regular'),
+    ('Staff', 'Staff'),
+    ('Premium', 'Premium'),
+)
+
+class UserRole(models.Model):
+    """Model definition for UserRole."""
+
+    user = models.OneToOneField(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    role = models.CharField(_("Role"), max_length=8, default="Regular", choices=CHOICES)
+
+    class Meta:
+        """Meta definition for UserRole."""
+
+        verbose_name = 'UserRole'
+        verbose_name_plural = 'UserRoles'
+
+    def __str__(self):
+        """Unicode representation of UserRole."""
+        return self.role
+

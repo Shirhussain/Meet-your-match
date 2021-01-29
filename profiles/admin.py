@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Address, Job, UserPicture
+from .models import Address, Job, UserPicture, UserRole
 
 
 @admin.register(Address)
@@ -17,3 +17,9 @@ class JobAdmin(admin.ModelAdmin):
 class UserPictureAdmin(admin.ModelAdmin):
     class Meta:
         model = UserPicture
+
+
+@admin.register(UserRole)
+class UserRoleAdmin(admin.ModelAdmin):
+    class Meta:
+        model = UserRole

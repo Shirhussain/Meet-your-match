@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _ 
 
 from functools import reduce
+from profiles.models import Job
 # or 
 # import functools
 
@@ -42,7 +43,7 @@ class MatchManager(models.Manager):
         per = [] 
         for i in obj:
             per.append(i.percent)
-        avg_per = reduce(lambda x,y: x+y, per)/len(per)*100-40
+        avg_per = reduce(lambda x,y: x+y, per)/len(per)
         # because it's return percent so I can use > or <
         if self.are_matched(user1, user2) >= avg_per:
             print("Matched")
@@ -73,3 +74,21 @@ class Match(models.Model):
     def __str__(self):
         """Unicode representation of Match."""
         return self.percent
+
+
+class JobMatch(models.Model):
+    """Model definition for JobMatch."""
+
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    job  = models.ForeignKey(Job, verbose_name=_("Job"), on_delete=models.CASCADE, null=True, blank=True)
+    show = models.BooleanField(_("Show"), default=True)
+    
+    class Meta:
+        """Meta definition for JobMatch."""
+
+        verbose_name = 'JobMatch'
+        verbose_name_plural = 'JobMatchs'
+
+    def __str__(self):
+        """Unicode representation of JobMatch."""
+        return self.job.position

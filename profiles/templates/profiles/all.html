@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
     all title
 {% endblock title %}
@@ -8,28 +8,52 @@
     <div class="row">
         <div class="col-lg-6">
             <h1>Users</h1>
-            {% for user in users %}
-                <li><a href="{% url 'profiles:profile' user.username %}">{{user}}</a>
+            <div class="row">
+                {% for user in users %}
+
+                    {% if not request.user == user %}
+                        <div class="col-lg-4">
+                            <a href="{% url 'profiles:profile' user.username %}">
+                                
+                                {% for pic in user.userpicture_set.all %}
+                                    
+                                    {% if forloop.first %}
+                                        <img src="{{pic.image.url}}" alt="profile image" class="img-fluid rounded">     
+                                    {% endif %}
+                                        
+                                {% endfor %}
+
+                                {% if not user.userpicture_set.all %}
+                                    <img src="{% static 'img/image.png' %}" alt="default avatar" class="img-fluid rounded">
+                                {% endif %}
+                                    
+                                {{user}}</a><br>
+                            {% for item in user.address_set.all %}
+                                {% if forloop.first %}
+                                    {{item}}
+                                {% endif %}
+                            {% endfor %}
+                            <br> <br> <br>
+                        </div>
+                    {% endif %}
                     
-                    {% for item in user.address_set.all %}
-                        
-                        {% if forloop.first %}
-                            {{item}}
-                        {% endif %}
-                            
-                    {% endfor %}
-                        
-                </li>
-            {% endfor %}
+                    <!-- i have to make sure that i'm creating a row each time in the for loop -->
+                    <!-- im closing in the fourth one because i have four column 
+                        and it means that it should  pass thee of them and then in the fourth one it should create a new row
+                    -->
+                    {% cycle '' '' '' '</div><div class="row">' %}
+                {% endfor %}
+            </div>
         </div>
 
         <div class="col-lg-6">
             <h1>Suggested Jobs</h1>
-            {% for user in matches %}
+            
+            {% for abc in request.user.jobmatch_set.all %}
                 
-                {% for job in user.job_set.all %}
-                    <li>{{job.position}} at {{job.employer}} in {{job.city}}</li>
-                {% endfor %}
+                {% if abc.show %}
+                    <li>{{abc.job.position}} at {{abc.job.employer}} in {{abc.job.city}}</li>
+                {% endif %}
                     
             {% endfor %}
         </div>
