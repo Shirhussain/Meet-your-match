@@ -17,8 +17,16 @@ def home(request):
 
 def all(request):
     users = User.objects.filter(is_active=True)
+    try:
+        matches = Match.objects.user_mataches(request.user)
+    except:
+        # if the user is not logged in so code should pass
+        matches = []
+        pass 
+    
     context = {
         'users': users,
+        'matches': matches,
     }
     return render(request, "profiles/all.html", context)
 
@@ -29,7 +37,9 @@ def single_user(request, username):
         raise Http404
     
     set_match, created = Match.objects.get_or_create(from_user=request.user, to_user=user)
-    set_match.percent = round(match_percentage(request.user, user), 2)*100
+    set_match.percent = round(match_percentage(request.user, user), 2)
+    # for line below the order is not importnat because of the way i wrote the algorithm
+    set_match.good_match = Match.objects.good_match(request.user, user)
     set_match.save()
     # the code bellow the order is doesn't matter because it's two sided now but for points it's matter 
     # because that one is one sided 

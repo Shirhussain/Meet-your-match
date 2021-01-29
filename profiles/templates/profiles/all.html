@@ -5,20 +5,34 @@
 {% endblock title %}
 
 {% block content %}
-    
-    {% for user in users %}
-        <li><a href="{% url 'profiles:profile' user.username %}">{{user}}</a>
-            
-            {% for item in user.address_set.all %}
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Users</h1>
+            {% for user in users %}
+                <li><a href="{% url 'profiles:profile' user.username %}">{{user}}</a>
+                    
+                    {% for item in user.address_set.all %}
+                        
+                        {% if forloop.first %}
+                            {{item}}
+                        {% endif %}
+                            
+                    {% endfor %}
+                        
+                </li>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-6">
+            <h1>Suggested Jobs</h1>
+            {% for user in matches %}
                 
-                {% if forloop.first %}
-                    {{item}}
-                {% endif %}
+                {% for job in user.job_set.all %}
+                    <li>{{job.position}} at {{job.employer}} in {{job.city}}</li>
+                {% endfor %}
                     
             {% endfor %}
-                
-        </li>
-    {% endfor %}
-        
+        </div>
+    </div>
 {% endblock content %}
     
