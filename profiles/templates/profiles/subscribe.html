@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Subscribe
+{% endblock title %}
+
+
+{% block jQuery %}
+    $(".scroll").click(function(e){
+        e.preventDefault();
+        $link = $(this).attr("href");
+        console.log($link);
+        $("body, html").animate({
+            <!-- i put offset-30 to not just hide and offset about 30 from the top -->
+            scrollTop: $($link).offset().top-30
+        }, "slow");
+    });
+{% endblock jQuery %}
+    
+
+{% block content %}
+<div class="row text-center">
+    <h1>Subscribe</h1>
+</div>
+    <div class="row text-center">
+        <div class="col-sm-3">
+            <h2>Free</h2>
+            <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a href="#free" class="scroll">learn more</a></li>
+                </ul>
+            </p>
+            <a href="#singup" class="btn btn-success scroll">Submit</a>
+        </div>
+        <div class="col-sm-3">
+            <h2>Premium</h2>
+            <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a href="#one" class="scroll">Learn more</a></li>
+                </ul>
+            </p>
+            <a href="#singup" class="btn btn-success scroll">Sign for 1 Month</a>
+        </div>
+        <div class="col-sm-3">
+            <h2>Premium plus</h2>
+            <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a href="#six" class="scroll">Learn more</a></li>
+                </ul>
+            </p>
+            <a href="#singup" class="btn btn-success scroll">Sign for 6 Month</a>
+        </div>
+        <div class="col-sm-3">
+            <h2>Premium Pro</h2>
+            <p>
+                <ul>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li>Some Feature</li>
+                    <li><a href="#twelve" class="scroll">Sign for 12 Month</a></li>
+                </ul>
+            </p>
+            <a href="#singup" class="btn btn-success scroll">Sign for 12 Month</a>
+        </div>
+    </div>
+    
+    <hr>
+    <br>
+
+    <a name='free'></a>
+    <dvi class="row" id="free" style="height: 1000px;">
+
+
+
+        <h2>Free</h2>
+    </dvi>
+
+    <a name='one'></a>
+    <dvi class="row" id="one" style="height: 1000px;">
+
+
+
+        <h2>One</h2>
+    </dvi>
+    <a name='six'></a>
+
+    <dvi class="row" id="six" style="height: 1000px;">
+
+
+
+        <h2>Six</h2>
+    </dvi>
+
+    <a name='twelve'></a>
+    <dvi class="row" id="twelve" style="height: 1000px;">
+
+
+
+        <h2>Twelve</h2>
+    </dvi>
+
+    <a name='singup'></a>
+    <dvi class="row" id="singup" style="height: 1000px;">
+
+
+
+        <h2>Sing Up</h2>
+    </dvi>
+{% endblock content %}
+    

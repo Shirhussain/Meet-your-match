@@ -15,6 +15,15 @@ def home(request):
     }
     return render(request, "home.html", context)
 
+def subscribe(request):
+    if request.user.is_authenticated:
+        # subscription choice 
+        # assign that choices after successful payment
+        # collect create card here too
+        return render(request, "profiles/subscribe.html", {})
+    else:
+        return render(request, "home.html")
+
 def all(request):
     if request.user.is_authenticated:
         users = User.objects.filter(is_active=True)
