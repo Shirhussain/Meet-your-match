@@ -60,9 +60,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'matches.middleware.CheckMembership',
 ]
 
 ROOT_URLCONF = 'conf.urls'
+SUBSCRIPTION_REQUIRED_URLS = ["questions:questions"]
 
 TEMPLATES = [
     {
