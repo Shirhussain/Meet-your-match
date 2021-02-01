@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _ 
 from django.urls import reverse
+from django.contrib.auth.signals import user_logged_in
+
+import stripe
+from conf.stripe_info import Secret_key, Publishable_key
+
+# here i didn't hide so you have to make sure that use decupal or enve to hide this sensitive info
+stripe.api_key = Secret_key
+
 
 
 class Address(models.Model):
@@ -95,4 +103,39 @@ class UserRole(models.Model):
     def __str__(self):
         """Unicode representation of UserRole."""
         return self.role
+
+
+
+class UserStripe(models.Model):
+    """Model definition for UserStripe."""
+
+    user = models.OneToOneField(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    stripe_id = models.CharField(_("Stripe id"), max_length=50, null=True, blank=True)
+
+    def get_stripe_id(self):
+        return self.stripe_id 
+
+    class Meta:
+        """Meta definition for UserStripe."""
+
+        verbose_name = 'UserStripe'
+        verbose_name_plural = 'UserStripes'
+
+    def __str__(self):
+        """Unicode representation of UserStripe."""
+        return self.user.username
+
+def CreateStripeId(sender, user, request, **kwargs):
+    new_id, created = UserStripe.objects.get_or_create(user=user)
+    if created:
+        print(created)
+        # add user's email to stripe, then set the stripe ID
+        stripe_customer = stripe.Customer.create(email=user.email, description=f"Stripe customer email is: {user.email}")
+        print("This is Stripe customer id", stripe_customer.id)
+        new_id.stripe_id = stripe_customer.id
+        new_id.save()
+    else:
+        print("Not Created stripe id")
+
+user_logged_in.connect(CreateStripeId)
 
