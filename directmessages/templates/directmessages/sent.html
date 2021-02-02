@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Direct messages
+{% endblock title %}
+
+{% block content %}
+    
+    {% for item in messages_sent %}
+        <h3>{{item}} <small> sender: {{item.sender}} on {{item.sent}}</small></h3>
+
+        <div class="card card-body bg-light">
+            {{item.body}}
+        </div>
+    {% endfor %}
+        
+{% endblock content %}
+    

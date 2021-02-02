@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Direct messages
+{% endblock title %}
+
+{% block content %}
+        
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">From</th>
+            <th scope="col">Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+            
+            {% for item in messages_in_inbox %}
+                <tr>
+                <td>{{item.sender}}</td>
+                <td><a href="{{item.get_absolute_url}}">{{item.subject|truncatewords:10}}</a> {% if item.sent %} <small>{{item.sent}}</small> {% endif %} </td>
+                </tr>
+            {% endfor %}
+                
+        </tbody>
+      </table>
+{% endblock content %}
+    

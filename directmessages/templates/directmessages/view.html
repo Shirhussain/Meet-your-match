@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My message
+{% endblock title %}
+
+{% block content %}
+    <a href="{% url 'directmessages:reply' message.id %}">Reply</a>
+    {{message}}
+{% endblock content %}
+    

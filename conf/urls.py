@@ -11,6 +11,7 @@ urlpatterns = [
     path('accounts/', include('registration.backends.default.urls')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('questions/', include('questions.urls', namespace='questions')),
+    path('directmessages/', include('directmessages.urls', namespace='directmessages')),
 ]
 
 if settings.DEBUG:

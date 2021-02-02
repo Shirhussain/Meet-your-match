@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'profiles',
     'questions',
     'matches',
+    'directmessages',
 ]
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

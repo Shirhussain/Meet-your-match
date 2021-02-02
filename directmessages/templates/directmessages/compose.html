@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags  %}
+{% block title %}
+    Direct messages
+{% endblock title %}
+
+{% block content %}
+    <h1>Compose</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input class="btn btn-primary" type="submit" value="Send">
+    </form>
+        
+{% endblock content %}
+    

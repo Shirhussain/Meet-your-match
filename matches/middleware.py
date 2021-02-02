@@ -26,9 +26,9 @@ class CheckMembership:
             # messages.success(request, "user is logged in ")
             if request.path in URLS:
                 role = request.user.userrole
-                if str(role) != "Staff  ":
+                if str(role) == "Regular":
                     messages.success(request, f"you need to upgrade your membership plan to see that, your rol is: {role}")
                     return HttpResponseRedirect(reverse("home"))
         else:
-            messages.success(request, "user is not logged in")
+            # messages.error(request, "user is not logged in")
             print("not logged in horraaaaaaaaaaaaaaaaaaaaaa")

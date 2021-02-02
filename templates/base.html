@@ -26,9 +26,16 @@
             <div class="col-lg-2 col-12">
               <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                 <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}"  href="{% url 'home' %}" role="tab" aria-controls="v-pills-home" aria-selected="true"><span class="badge badge-secondary float-right mt-1">9</span>Home</a>
-                <a class="nav-link "  href="{% if request.user.is_authenticated %} {% url 'profiles:profile' request.user.username %} {% endif %} " role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
-                <a class="nav-link "  href="/" role="tab" aria-controls="v-pills-messages" aria-selected="false"><span class="badge badge-secondary float-right mt-1">12</span>Messages</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'profile' %} active {% endif %} "  href="{% if request.user.is_authenticated %} {% url 'profiles:profile' request.user.username %} {% endif %} " role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
                 <a class="nav-link {% if request.resolver_match.url_name == 'questions' %}active{% endif %} "  href="{% url 'questions:questions' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Improve Match</a>
+                <a class="nav-link "  href="{% url 'directmessages:inbox' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">{% if not 'messages' in request.get_full_path %}<span class="badge badge-secondary float-right mt-1">{{request.session.number_of_messages}}</span>{% endif %} Messages</a>
+                
+                {% if 'messages' in request.get_full_path %}
+                  <a class="nav-link {% if request.resolver_match.url_name == 'compose' %} active {% endif %} "  href="{% url 'directmessages:compose' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Compose</a>
+                  <a class="nav-link {% if request.resolver_match.url_name == 'inbox' %} active {% endif %} "  href="{% url 'directmessages:inbox' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Inbox <span class="badge badge-secondary float-right mt-1">{{request.session.number_of_messages}}</span></a>
+                  <a class="nav-link {% if request.resolver_match.url_name == 'sent' %} active {% endif %} "  href="{% url 'directmessages:sent' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Sent</a>
+                {% endif %}
+                  
               </div>
             </div>
           {% endif %}
