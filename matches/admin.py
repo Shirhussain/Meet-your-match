@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Match, JobMatch
+from .models import Match, JobMatch, MatchList
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
@@ -14,3 +14,9 @@ class JobMatchAdmin(admin.ModelAdmin):
     
     class Meta:
         model = JobMatch
+
+
+@admin.register(MatchList)
+class MatchListAdmin(admin.ModelAdmin):
+    class Meta:
+        model = MatchList

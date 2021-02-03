@@ -9,13 +9,13 @@
         <div class="col-lg-6">
             <h1>Users</h1>
             <div class="row">
-                {% for user in users %}
-
-                    {% if not request.user == user %}
+                {% for user in matches %}
+                    {{user.match}}
+                    {% if not request.user == user.user %}
                         <div class="col-lg-4">
-                            <a href="{% url 'profiles:profile' user.username %}">
+                            <a href="{% url 'profiles:profile' user.match.username %}">
                                 
-                                {% for pic in user.userpicture_set.all %}
+                                {% for pic in user.match.userpicture_set.all %}
                                     
                                     {% if forloop.first %}
                                         <img src="{{pic.image.url}}" alt="profile image" class="img-fluid rounded">     
@@ -23,12 +23,12 @@
                                         
                                 {% endfor %}
 
-                                {% if not user.userpicture_set.all %}
+                                {% if not user.match.userpicture_set.all %}
                                     <img src="{% static 'img/image.png' %}" alt="default avatar" class="img-fluid rounded">
                                 {% endif %}
                                     
                                 {{user}}</a><br>
-                            {% for item in user.address_set.all %}
+                            {% for item in user.match.address_set.all %}
                                 {% if forloop.first %}
                                     {{item}}
                                 {% endif %}

@@ -18,7 +18,15 @@
             {% for item in messages_in_inbox %}
                 <tr>
                 <td>{{item.sender}}</td>
-                <td><a href="{{item.get_absolute_url}}">{{item.subject|truncatewords:10}}</a> {% if item.sent %} <small>{{item.sent}}</small> {% endif %} </td>
+                <td>
+                  
+                  {% if item.read %}
+                    <i class="bi bi-check2-all"></i>
+                  {% else %}
+                    <i class="bi bi-check2"></i>
+                  {% endif %}
+                  <a {% if item.read %} style="color: grey;" {% endif %} href="{{item.get_absolute_url}}">{{item.subject|truncatewords:10}}</a> {% if item.sent %} <small>{{item.sent}}</small> {% endif %} 
+                </td>
                 </tr>
             {% endfor %}
                 

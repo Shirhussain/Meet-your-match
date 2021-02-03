@@ -6,7 +6,7 @@ from django.forms import modelformset_factory
 
 from .forms import AddressForm, JobForm, UserPictureForm
 from .models import Job, Address, UserPicture
-from matches.models import JobMatch, Match
+from matches.models import JobMatch, Match, MatchList
 from questions.matching import match_percentage
 
 def home(request):
@@ -28,7 +28,9 @@ def all(request):
     if request.user.is_authenticated:
         users = User.objects.filter(is_active=True)
         try:
-            matches = Match.objects.user_mataches(request.user)
+            # matches = Match.objects.user_mataches(request.user)
+            Match.objects.user_mataches(user=request.user)
+            matches = MatchList.objects.filter(user=request.user)
         except:
             # if the user is not logged in so code should pass
             matches = []

@@ -7,6 +7,29 @@ from profiles.models import Job
 # or 
 # import functools
 
+
+class MatchList(models.Model):
+    """Model definition for MatchList."""
+
+    user = models.ForeignKey(User, verbose_name=_("Main User"), related_name="main_user", on_delete=models.CASCADE)
+    match = models.ForeignKey(User, verbose_name=_("Match User"), related_name="match_user", on_delete=models.CASCADE)
+    read = models.BooleanField(_("Read"), default=False)
+    read_at = models.DateField(_("Reat at"), auto_now=False, auto_now_add=False, null=True, blank=True)
+    timestamp = models.DateTimeField(_("Timestamp"), auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(_("Updated"), auto_now=True, auto_now_add=False)
+
+    class Meta:
+        """Meta definition for MatchList."""
+
+        ordering = ['-updated', '-timestamp']
+        verbose_name = 'MatchList'
+        verbose_name_plural = 'MatchLists'
+
+    def __str__(self):
+        """Unicode representation of MatchList."""
+        return str(self.user.username)
+
+
 class MatchManager(models.Manager):
     def user_mataches(self, user):
         matches = []
@@ -15,12 +38,14 @@ class MatchManager(models.Manager):
             for abc in obj:
                 if abc.to_user != user:
                     if Match.objects.good_match(abc.to_user, user):
+                        add_to_list, created = MatchList.objcts.get_or_create(user=user, match=abc.to_user)
                         matches.append(abc.to_user)
         if self.filter(to_user=user).count()>0:
             obj = Match.objects.filter(to_user=user)
             for abc in obj:
                 if abc.from_user != user:
                     if Match.objects.good_match(abc.from_user, user):
+                        add_to_list, created = MatchList.objects.get_or_create(user=user, match=abc.from_user)
                         matches.append(abc.from_user)
         return matches
         
