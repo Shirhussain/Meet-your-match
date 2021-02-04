@@ -1,3 +1,4 @@
+import datetime
 from django.urls import reverse
 from django.shortcuts import Http404, HttpResponseRedirect, get_object_or_404, redirect, render
 from django.contrib.auth.models import User
@@ -29,7 +30,6 @@ def all(request):
         users = User.objects.filter(is_active=True)
         try:
             # matches = Match.objects.user_mataches(request.user)
-            Match.objects.user_mataches(user=request.user)
             matches = MatchList.objects.filter(user=request.user)
         except:
             # if the user is not logged in so code should pass
@@ -49,6 +49,15 @@ def single_user(request, username):
         user = User.objects.get(username=username)
     except:
         raise Http404
+
+    try:
+        viewed = MatchList.objects.get(user=request.user, match=user)
+        viewed.read = True
+        if viewed.read_at is None:
+            viewed.read_at = datetime.datetime.now()
+        viewed.save()
+    except:
+        pass
     
     set_match, created = Match.objects.get_or_create(from_user=request.user, to_user=user)
     set_match.percent = round(match_percentage(request.user, user), 2)

@@ -7,36 +7,33 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-6">
-            <h1>Users</h1>
+            <h1>Matched Users</h1>
             <div class="row">
                 {% for user in matches %}
-                    {{user.match}}
-                    {% if not request.user == user.user %}
-                        <div class="col-lg-4">
-                            <a href="{% url 'profiles:profile' user.match.username %}">
+                
+                    <div class="col-lg-4">
+                        <a href="{% url 'profiles:profile' user.match.username %}">
+                            
+                            {% for pic in user.match.userpicture_set.all %}
                                 
-                                {% for pic in user.match.userpicture_set.all %}
-                                    
-                                    {% if forloop.first %}
-                                        <img src="{{pic.image.url}}" alt="profile image" class="img-fluid rounded">     
-                                    {% endif %}
-                                        
-                                {% endfor %}
-
-                                {% if not user.match.userpicture_set.all %}
-                                    <img src="{% static 'img/image.png' %}" alt="default avatar" class="img-fluid rounded">
-                                {% endif %}
-                                    
-                                {{user}}</a><br>
-                            {% for item in user.match.address_set.all %}
                                 {% if forloop.first %}
-                                    {{item}}
+                                    <img src="{{pic.image.url}}" alt="profile image" class="img-fluid rounded">     
                                 {% endif %}
+                                    
                             {% endfor %}
-                            <br> <br> <br>
-                        </div>
-                    {% endif %}
-                    
+
+                            {% if not user.match.userpicture_set.all %}
+                                <img src="{% static 'img/image.png' %}" alt="default avatar" class="img-fluid rounded">
+                            {% endif %}
+                                
+                            {{user.match}}</a><br>
+                        {% for item in user.match.address_set.all %}
+                            {% if forloop.first %}
+                                {{item}}
+                            {% endif %}
+                        {% endfor %}
+                        <br> <br> <br>
+                    </div>
                     <!-- i have to make sure that i'm creating a row each time in the for loop -->
                     <!-- im closing in the fourth one because i have four column 
                         and it means that it should  pass thee of them and then in the fourth one it should create a new row

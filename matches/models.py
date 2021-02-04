@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _ 
+from django.contrib.auth.signals import user_logged_in
 
 from functools import reduce
 from profiles.models import Job
@@ -14,7 +15,7 @@ class MatchList(models.Model):
     user = models.ForeignKey(User, verbose_name=_("Main User"), related_name="main_user", on_delete=models.CASCADE)
     match = models.ForeignKey(User, verbose_name=_("Match User"), related_name="match_user", on_delete=models.CASCADE)
     read = models.BooleanField(_("Read"), default=False)
-    read_at = models.DateField(_("Reat at"), auto_now=False, auto_now_add=False, null=True, blank=True)
+    read_at = models.DateField(_("Read at"), auto_now=False, auto_now_add=False, null=True, blank=True)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(_("Updated"), auto_now=True, auto_now_add=False)
 
@@ -27,28 +28,27 @@ class MatchList(models.Model):
 
     def __str__(self):
         """Unicode representation of MatchList."""
-        return str(self.user.username)
+        return str(self.match.username)
+
+
+# after each loogin it will look for a match and create one
+def login_user_mataches(sender, user, request, **kwargs):
+    obj = Match.objects.filter(from_user=user)
+    for abc in obj:
+        if abc.to_user != user:
+            if Match.objects.good_match(abc.to_user, user):
+                add_to_list, created = MatchList.objects.get_or_create(user=user, match=abc.to_user)
+    obj2 = Match.objects.filter(to_user=user)
+    for abc in obj2:
+        if abc.from_user != user:
+            if Match.objects.good_match(abc.from_user, user):
+                add_to_list, created = MatchList.objects.get_or_create(user=user, match=abc.from_user)
+    request.session["new_matches_count"] = MatchList.objects.filter(user=user).filter(read=False).count()
+
+user_logged_in.connect(login_user_mataches)
 
 
 class MatchManager(models.Manager):
-    def user_mataches(self, user):
-        matches = []
-        if self.filter(from_user=user).count()>0:
-            obj = Match.objects.filter(from_user=user)
-            for abc in obj:
-                if abc.to_user != user:
-                    if Match.objects.good_match(abc.to_user, user):
-                        add_to_list, created = MatchList.objcts.get_or_create(user=user, match=abc.to_user)
-                        matches.append(abc.to_user)
-        if self.filter(to_user=user).count()>0:
-            obj = Match.objects.filter(to_user=user)
-            for abc in obj:
-                if abc.from_user != user:
-                    if Match.objects.good_match(abc.from_user, user):
-                        add_to_list, created = MatchList.objects.get_or_create(user=user, match=abc.from_user)
-                        matches.append(abc.from_user)
-        return matches
-        
     # here the ordere for user it doesn't matter
     def are_matched(self, user1, user2):
         if self.filter(from_user=user1, to_user=user2).count()>0:

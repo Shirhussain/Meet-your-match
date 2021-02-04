@@ -25,7 +25,7 @@
           {% if request.user.is_authenticated %}
             <div class="col-lg-2 col-12">
               <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}"  href="{% url 'home' %}" role="tab" aria-controls="v-pills-home" aria-selected="true"><span class="badge badge-secondary float-right mt-1">9</span>Home</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}"  href="{% url 'home' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">{% if request.session.new_matches_count %}<span class="badge badge-secondary float-right mt-1">{{request.session.new_matches_count}}</span>{% endif %}Home</a>
                 <a class="nav-link {% if request.resolver_match.url_name == 'profile' %} active {% endif %} "  href="{% if request.user.is_authenticated %} {% url 'profiles:profile' request.user.username %} {% endif %} " role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>
                 <a class="nav-link {% if request.resolver_match.url_name == 'questions' %}active{% endif %} "  href="{% url 'questions:questions' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Improve Match</a>
                 <a class="nav-link "  href="{% url 'directmessages:inbox' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">
